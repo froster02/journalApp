@@ -24,6 +24,7 @@ public class SpringSecurity {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user").permitAll()
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/", "/register", "/login", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
@@ -37,7 +38,8 @@ public class SpringSecurity {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
-                .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService)
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
